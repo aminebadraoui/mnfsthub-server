@@ -55,11 +55,11 @@ router.post('/lists', async (req, res) => {
 router.patch('/lists/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { Tenant_ID } = req.body;
+        const { 'Tenant ID': tenantId } = req.body;
 
-        // Ensure Tenant_ID is provided
-        if (!Tenant_ID) {
-            return res.status(400).json({ error: 'Tenant_ID is required' });
+        // Ensure Tenant ID is provided
+        if (!tenantId) {
+            return res.status(400).json({ error: 'Tenant ID is required' });
         }
 
         const data = await baserowService.updateList(id, req.body);
@@ -73,11 +73,11 @@ router.patch('/lists/:id', async (req, res) => {
 router.delete('/lists/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { Tenant_ID } = req.query;
+        const { 'Tenant ID': tenantId } = req.body;
 
-        // Ensure Tenant_ID is provided
-        if (!Tenant_ID) {
-            return res.status(400).json({ error: 'Tenant_ID is required' });
+        // Ensure Tenant ID is provided
+        if (!tenantId) {
+            return res.status(400).json({ error: 'Tenant ID is required' });
         }
 
         await baserowService.deleteList(id);
@@ -113,11 +113,11 @@ router.get('/campaigns', async (req, res) => {
 
 router.post('/campaigns', async (req, res) => {
     try {
-        const { Tenant_ID } = req.body;
+        const { 'Tenant ID': tenantId } = req.body;
 
-        // Ensure Tenant_ID is provided
-        if (!Tenant_ID) {
-            return res.status(400).json({ error: 'Tenant_ID is required' });
+        // Ensure Tenant ID is provided
+        if (!tenantId) {
+            return res.status(400).json({ error: 'Tenant ID is required' });
         }
 
         const data = await baserowService.createCampaign(req.body);
@@ -131,11 +131,11 @@ router.post('/campaigns', async (req, res) => {
 router.patch('/campaigns/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { Tenant_ID } = req.body;
+        const { 'Tenant ID': tenantId } = req.body;
 
-        // Ensure Tenant_ID is provided
-        if (!Tenant_ID) {
-            return res.status(400).json({ error: 'Tenant_ID is required' });
+        // Ensure Tenant ID is provided
+        if (!tenantId) {
+            return res.status(400).json({ error: 'Tenant ID is required' });
         }
 
         const data = await baserowService.updateCampaign(id, req.body);
@@ -149,11 +149,11 @@ router.patch('/campaigns/:id', async (req, res) => {
 router.delete('/campaigns/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { Tenant_ID } = req.query;
+        const { 'Tenant ID': tenantId } = req.body;
 
-        // Ensure Tenant_ID is provided
-        if (!Tenant_ID) {
-            return res.status(400).json({ error: 'Tenant_ID is required' });
+        // Ensure Tenant ID is provided
+        if (!tenantId) {
+            return res.status(400).json({ error: 'Tenant ID is required' });
         }
 
         await baserowService.deleteCampaign(id);
