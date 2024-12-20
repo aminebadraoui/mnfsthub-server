@@ -31,9 +31,9 @@ class BaserowService {
                 const filterParams = Object.entries(filters)
                     .map(([key, value]) => {
                         if (value !== undefined && value !== '' && value !== 'N/A') {
-                            // Use exact matching for Tenant ID and List Name, contains for others
-                            const operator = (key === 'Tenant ID' || key === 'List Name') ? 'equal' : 'contains';
-                            return `filter__${key}__${operator}=${encodeURIComponent(value)}`;
+                            // Convert spaces to underscores and add field_ prefix
+                            const fieldName = key.replace(/\s+/g, '_');
+                            return `filter__field_${fieldName}__equal=${encodeURIComponent(value)}`;
                         }
                         return null;
                     })
@@ -167,7 +167,7 @@ class BaserowService {
                 const filterParams = Object.entries(filters)
                     .map(([key, value]) => {
                         if (value !== undefined && value !== '' && value !== 'N/A') {
-                            // Always use exact matching for List Name and Tenant ID
+                            // Use the field name directly without any prefix
                             return `filter__${key}__equal=${encodeURIComponent(value)}`;
                         }
                         return null;
@@ -181,7 +181,13 @@ class BaserowService {
             }
 
             console.log('Fetching contacts with URL:', url);
+            console.log('Filters used:', filters);
             const response = await axios.get(url, this.config);
+            console.log('Response data:', {
+                count: response.data.count,
+                results: response.data.results.length,
+                filters: filters
+            });
             return {
                 results: response.data.results,
                 count: response.data.count,
