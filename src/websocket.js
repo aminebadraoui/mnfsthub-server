@@ -82,7 +82,7 @@ class WebSocketServer {
             for (const contact of normalizedData.list) {
                 try {
                     const contactData = {
-                        'Tenant ID': tenantId,
+                        'Tenant_ID': tenantId,
                         'Full name': contact['Full name'] || contact['Full Name'] || '',
                         'First n': contact['First name'] || contact['First Name'] || '',
                         'Last': contact['Last name'] || contact['Last Name'] || '',
@@ -96,7 +96,7 @@ class WebSocketServer {
                         'Facebook': contact['Facebook'] || '',
                         'Twitter': contact['Twitter'] || '',
                         'Industry': contact['Industry'] || '',
-                        'List Name': listName,
+                        'List_Name': listName,
                         'Tags': listTags,
                         'Active': true
                     };
@@ -105,7 +105,7 @@ class WebSocketServer {
                     if (contact.Email && contact.Email !== 'N/A') {
                         const existingContacts = await baserowService.getContacts({
                             filters: {
-                                'Tenant ID': tenantId,
+                                'Tenant_ID': tenantId,
                                 'Email': contact.Email
                             }
                         });
