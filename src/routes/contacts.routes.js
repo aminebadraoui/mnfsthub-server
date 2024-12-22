@@ -1,5 +1,5 @@
 import express from 'express';
-import { getContacts, createContact, getContactById, updateContact, deleteContact } from '../services/contacts.service.js';
+import { getContacts, createContact, getContactById, updateContact, deleteContact, addContactsToList } from '../services/contacts.service.js';
 import { authenticateToken } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -83,6 +83,23 @@ router.delete('/:id', async (req, res) => {
         res.json({ message: 'Contact deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+});
+
+// Create multiple contacts in batch
+router.post('/batch', async (req, res) => {
+    try {
+        const { contacts, defaultJobTitle, defaultLocation } = req.body;
+        const defaultValues = {
+            jobTitle: defaultJobTitle,
+            location: defaultLocation
+        };
+
+        const createdContacts = await addContactsToList(contacts, defaultValues);
+        res.status(201).json(createdContacts);
+    } catch (error) {
+        console.error('Error in batch contact creation:', error);
+        res.status(500).json({ error: 'Failed to create contacts' });
     }
 });
 

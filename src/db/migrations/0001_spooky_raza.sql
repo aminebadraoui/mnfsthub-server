@@ -1,0 +1,1 @@
+ALTER TABLE "contacts" ADD COLUMN "available_channels" jsonb DEFAULT '[]'::jsonb;

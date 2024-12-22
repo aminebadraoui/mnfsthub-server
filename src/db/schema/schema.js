@@ -56,6 +56,7 @@ export const contacts = pgTable('contacts', {
     contactChannels: jsonb('contact_channels').default([]),
     lastContactChannel: varchar('last_contact_channel', { length: 64 }),
     lastContactedAt: timestamp('last_contacted_at'),
+    availableChannels: jsonb('available_channels').default([]),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull()
 }); 

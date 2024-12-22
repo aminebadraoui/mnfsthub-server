@@ -1,17 +1,50 @@
 import { db } from '../db/index.js';
 import { lists } from '../db/schema/schema.js';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
+import { contacts } from '../db/schema/schema.js';
 
 export const getLists = async (filters = {}) => {
     try {
-        let query = db.select().from(lists);
+        // First, get the base list data
+        let query = db
+            .select()
+            .from(lists);
 
         if (filters.tenantId) {
             query = query.where(eq(lists.tenantId, filters.tenantId));
         }
 
-        return await query;
+        const results = await query;
+
+        // If no results, return empty array
+        if (!results || results.length === 0) {
+            return [];
+        }
+
+        // Get contact counts for each list
+        const contactCounts = await Promise.all(
+            results.map(async (list) => {
+                const [count] = await db
+                    .select({ count: sql`count(*)::integer` })
+                    .from(contacts)
+                    .where(eq(contacts.listId, list.id));
+                return count?.count || 0;
+            })
+        );
+
+        // Combine list data with contact counts
+        return results.map((list, index) => ({
+            id: list.id,
+            tenantId: list.tenantId,
+            name: list.name,
+            description: list.description || '',
+            tags: list.tags || [],
+            metadata: list.metadata || {},
+            createdAt: list.createdAt,
+            updatedAt: list.updatedAt,
+            contactCount: contactCounts[index]
+        }));
     } catch (error) {
         console.error('Error in getLists:', error);
         throw error;
@@ -22,7 +55,7 @@ export const createList = async (listData) => {
     try {
         const newList = {
             id: uuidv4(),
-            tenantId: listData.tenantId,
+            tenantId: listData.tenant_id,
             name: listData.name,
             description: listData.description || '',
             tags: listData.tags || '',

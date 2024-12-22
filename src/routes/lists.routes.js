@@ -10,22 +10,33 @@ router.use(authenticateToken);
 // Get all lists
 router.get('/', async (req, res) => {
     try {
-        // Use the tenantId from the decoded token
-        const lists = await getLists({ tenantId: req.user.tenantId });
+        // Get tenantId from query parameters or authenticated user
+        const tenantId = req.query.tenant_id || req.user?.tenantId;
+
+        if (!tenantId) {
+            return res.status(400).json({ error: 'No tenant ID found. Please provide tenant_id in the query parameters or ensure you are authenticated.' });
+        }
+
+        const lists = await getLists({ tenantId });
         res.json(lists);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Error getting lists:', error);
+        res.status(500).json({ error: error.message || 'Internal server error' });
     }
 });
 
 // Create a new list
 router.post('/', async (req, res) => {
     try {
-        // Add tenantId from the decoded token
+        // Use tenant_id from request body
         const listData = {
-            ...req.body,
-            tenantId: req.user.tenantId
+            ...req.body
         };
+
+        if (!listData.tenant_id) {
+            return res.status(400).json({ error: 'tenant_id is required' });
+        }
+
         const list = await createList(listData);
         res.status(201).json(list);
     } catch (error) {
