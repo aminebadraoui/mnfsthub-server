@@ -5,6 +5,7 @@ import authRoutes from './routes/auth.routes.js';
 import listsRoutes from './routes/lists.routes.js';
 import contactsRoutes from './routes/contacts.routes.js';
 import campaignsRoutes from './routes/campaigns.routes.js';
+import webhookRoutes from './routes/webhooks.routes.js';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ const corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-N8N-API-KEY']
 };
 
 app.use(cors(corsOptions));
@@ -27,6 +28,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/lists', listsRoutes);
 app.use('/api/contacts', contactsRoutes);
 app.use('/api/campaigns', campaignsRoutes);
+app.use('/api/webhooks', webhookRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

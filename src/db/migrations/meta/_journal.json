@@ -15,6 +15,13 @@
       "when": 1734831091581,
       "tag": "0001_spooky_raza",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1734909217913,
+      "tag": "0002_exotic_robin_chapel",
+      "breakpoints": true
     }
   ]
 }

@@ -30,6 +30,20 @@ export const campaigns = pgTable('campaigns', {
     updatedAt: timestamp('updated_at').defaultNow().notNull()
 });
 
+export const workflows = pgTable('workflows', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    tenantId: uuid('tenant_id').references(() => users.id).notNull(),
+    n8nWorkflowId: varchar('n8n_workflow_id', { length: 256 }),
+    type: varchar('type', { length: 64 }).notNull(),
+    status: varchar('status', { length: 64 }).notNull(),
+    name: varchar('name', { length: 256 }).notNull(),
+    params: jsonb('params').default({}),
+    result: jsonb('result').default({}),
+    error: text('error'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull()
+});
+
 export const contacts = pgTable('contacts', {
     id: uuid('id').defaultRandom().primaryKey(),
     tenantId: uuid('tenant_id').references(() => users.id).notNull(),
